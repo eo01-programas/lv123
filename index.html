@@ -268,6 +268,7 @@
         .sel-PROG { border-color: var(--warning) !important; color: #b45309; background-color: var(--warning-light); }
         .sel-OK { border-color: var(--success) !important; color: #047857; font-weight: 600; background-color: var(--success-light); }
         .sel-ENLAV { border-color: #6366f1 !important; color: #4338ca; background-color: #e0e7ff; }
+        .sel-RECHAZADO { border-color: #dc2626 !important; color: #dc2626; font-weight: 600; background-color: #fee2e2; }
 
         /* Tags de estado */
         .status-tag {
@@ -2946,10 +2947,18 @@
                     const lavValue = getVal(row, "estado_lavada") || "EN LAV";
                     let lavClass = "sel-ENLAV"; 
                     if (lavValue === "OK") lavClass = "sel-OK";
+                    if (lavValue === "RECHAZADO") lavClass = "sel-RECHAZADO";
 
                     const lavSelect = `
                         <select class="table-select ${lavClass}" data-prev="${lavValue}" onchange="handleLavadoChange(${rowIndex}, this)">
                             <option value="EN LAV" ${lavValue === "EN LAV" ? "selected" : ""}>EN LAV</option>
+                            <option value="X ARRANQUE" ${lavValue === "X ARRANQUE" ? "selected" : ""}>X ARRANQUE</option>
+                            <option value="X LAVAR" ${lavValue === "X LAVAR" ? "selected" : ""}>X LAVAR</option>
+                            <option value="X CENTRIFUGAR" ${lavValue === "X CENTRIFUGAR" ? "selected" : ""}>X CENTRIFUGAR</option>
+                            <option value="X SECAR" ${lavValue === "X SECAR" ? "selected" : ""}>X SECAR</option>
+                            <option value="X AUD INTERNA" ${lavValue === "X AUD INTERNA" ? "selected" : ""}>X AUD INTERNA</option>
+                            <option value="X AUD CALIDAD" ${lavValue === "X AUD CALIDAD" ? "selected" : ""}>X AUD CALIDAD</option>
+                            <option value="RECHAZADO" ${lavValue === "RECHAZADO" ? "selected" : ""}>RECHAZADO</option>
                             <option value="OK" ${lavValue === "OK" ? "selected" : ""}>OK</option>
                         </select>`;
                     
@@ -3299,6 +3308,7 @@
                 if (v.toUpperCase().includes('PROG')) selectElement.classList.add("sel-PROG");
                 if (v === "OK") selectElement.classList.add("sel-OK");
                 if (v === "EN LAV") selectElement.classList.add("sel-ENLAV");
+                if (v === "RECHAZADO") selectElement.classList.add("sel-RECHAZADO");
             }
 
             // Asegurar que colMap tiene el índice correcto para colName; intentar variantes normalizadas si es necesario
