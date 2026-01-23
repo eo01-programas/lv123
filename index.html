@@ -798,6 +798,77 @@
         .c-estampado { background: #ecfdf5; color: #065f46; }
         .c-habilitado { background: #f3f4f6; color: #111827; }
 
+        /* --- BOTÓN FLOTANTE CON MENÚ DESPLEGABLE --- */
+        .floating-menu-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 50;
+        }
+
+        .floating-menu-toggle {
+            width: 35px;
+            height: 35px;
+            background: var(--primary);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.2s ease;
+            border: none;
+            padding: 0;
+        }
+
+        .floating-menu-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+
+        .floating-menu-items {
+            position: absolute;
+            bottom: 50px;
+            right: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .floating-menu-items.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .floating-menu-item {
+            width: 35px;
+            height: 35px;
+            background: var(--primary);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.2s ease;
+            border: none;
+            padding: 0;
+        }
+
+        .floating-menu-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+
         /* --- MODAL CARGA ASIGNAR ARTES --- */
         .modal-content-loading {
             background: white;
@@ -1021,24 +1092,31 @@
         </div>
     </div>
 
-    <!-- BOTÓN FLOTANTE: Stock (embudo) -->
-    <div id="stock-funnel-button" title="Ver stock" onclick="window.location.href='stock.html'" aria-label="Ver stock">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M3 4h18v2H3V4zM6 10h12v2H6v-2zM10 16h4v2h-4v-2z" fill="currentColor"/>
-        </svg>
-    </div>
-
-    <div id="costura-button" title="Ver costura" onclick="window.location.href='costura.html'" aria-label="Ver costura" style="position: fixed; bottom: 80px; right: 20px; width: 50px; height: 50px; background: var(--primary); color: var(--white); border-radius: 50%; display: none; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 50; transition: all 0.2s ease;">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" fill="currentColor"/>
-        </svg>
-    </div>
-
-    <div id="busqueda-button" title="Buscar OP/COLOR" onclick="window.location.href='busqueda.html'" aria-label="Buscar OP/COLOR" style="position: fixed; bottom: 25px; right: 20px; width: 50px; height: 50px; background: var(--primary); color: var(--white); border-radius: 50%; display: none; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 50; transition: all 0.2s ease;">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="10" cy="10" r="6" stroke="currentColor" stroke-width="2" fill="none"/>
-            <path d="M14.5 14.5l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
+    <!-- MENÚ FLOTANTE CON DESPLEGABLE -->
+    <div class="floating-menu-container">
+        <button class="floating-menu-toggle" id="floating-menu-toggle" title="Menú" aria-label="Menú">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 15l5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+        </button>
+        <div class="floating-menu-items" id="floating-menu-items">
+            <button class="floating-menu-item" title="Ver stock" onclick="window.location.href='stock.html'" aria-label="Ver stock">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 4h18v2H3V4zM6 10h12v2H6v-2zM10 16h4v2h-4v-2z" fill="currentColor"/>
+                </svg>
+            </button>
+            <button class="floating-menu-item" title="Ver costura" onclick="window.location.href='costura.html'" aria-label="Ver costura">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z" fill="currentColor"/>
+                </svg>
+            </button>
+            <button class="floating-menu-item" title="Buscar OP/COLOR" onclick="window.location.href='busqueda.html'" aria-label="Buscar OP/COLOR">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="10" cy="10" r="6" stroke="currentColor" stroke-width="2" fill="none"/>
+                    <path d="M14.5 14.5l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
     </div>
 
     <!-- MODAL STOCK FUNNEL -->
@@ -1071,7 +1149,7 @@
 
     <!-- HEADER -->
     <header>
-        <div class="brand"><i class="ph ph-table" title="Cargar giros"></i> Prog Lavandería</div>
+        <div class="brand"><i class="ph ph-table"></i> Prog Corte/Habilitado</div>
         <nav class="nav-tabs">
             <button class="nav-tab active" onclick="switchView('bloqueo', this)">
                 <i class="ph ph-lock-key"></i> Bloqueo <span class="badge" id="count-bloqueo">0</span>
@@ -1082,20 +1160,19 @@
             <button class="nav-tab" onclick="switchView('corte', this)">
                 <i class="ph ph-scissors"></i> Corte Pzas <span class="badge" id="count-corte">0</span>
             </button>
-            <!-- Ocultadas por petición del usuario: Corte Bloques, Enumerado, Transfer, Artes, Habilitado -->
-            <button class="nav-tab" style="display:none;" onclick="switchView('corte-bloques', this)">
+            <button class="nav-tab" onclick="switchView('corte-bloques', this)">
                 <i class="ph ph-stack"></i> Corte Bloques <span class="badge" id="count-corte-bloques">0</span>
             </button>
-            <button class="nav-tab" style="display:none;" onclick="switchView('enumerado', this)">
+            <button class="nav-tab" onclick="switchView('enumerado', this)">
                 <i class="ph ph-list-numbers"></i> Enumerado <span class="badge" id="count-enumerado">0</span>
             </button>
-            <button class="nav-tab" style="display:none;" onclick="switchView('transfer', this)">
+            <button class="nav-tab" onclick="switchView('transfer', this)">
                 <i class="ph ph-stamp"></i> Transfer <span class="badge" id="count-transfer">0</span>
             </button>
-            <button class="nav-tab" style="display:none;" onclick="switchView('artes', this)">
+            <button class="nav-tab" onclick="switchView('artes', this)">
                 <i class="ph ph-feather"></i> Artes (Pza) <span class="badge" id="count-artes">0</span>
             </button>
-            <button class="nav-tab" style="display:none;" onclick="switchView('habilitado', this)">
+            <button class="nav-tab" onclick="switchView('habilitado', this)">
                 <i class="ph ph-check-square"></i> Habilitado <span class="badge" id="count-habilitado">0</span>
             </button>
         </nav>
@@ -1120,7 +1197,7 @@
                         <tr>
                             <th id="th-bloqueo-p" style="width: 30px; display:none;">P</th>
                             <th style="width: 70px;">F. GIRADO</th>
-                            <th style="width: 65px;">HOD</th>
+                            <th style="width: 65px; text-align: center;">HOD</th>
                             <th style="width: 65px; text-align: center;">F.ING.COST</th>
                             <th style="width: 30px;">CLIENTE</th>
                             <th style="width: 60px;">RUTA</th>
@@ -1144,7 +1221,7 @@
         </section>
 
         <!-- VISTA ENUMERADO (FILAS CON STATUS = OK) -->
-        <section id="view-enumerado" class="view-section" style="display:none;">
+        <section id="view-enumerado" class="view-section">
             <div class="sub-nav" style="margin-bottom:10px;">
                 <button id="enumerado-btn-por" class="sub-tab active">
                     Por enumerar <span class="kg-badge" id="enumerado-pds-por">[-]</span>
@@ -1155,7 +1232,7 @@
                     <thead>
                         <tr>
                             <th id="th-enumerado-p" style="width: 30px;">P</th>
-                            <th style="width: 65px;">HOD</th>
+                            <th style="width: 65px; text-align: center;">HOD</th>
                             <th style="width: 75px; text-align: center;">F.ING.COST</th>
                             <th style="width: 40px;">CLIENTE</th>
                             <th style="width: 50px;">RUTA</th>
@@ -1180,7 +1257,7 @@
         </section>
 
         <!-- VISTA TRANSFER -->
-        <section id="view-transfer" class="view-section" style="display:none;">
+        <section id="view-transfer" class="view-section">
             <div class="sub-nav">
                 <button id="btn-transfer-xprog" class="sub-tab active" onclick="filterTransfer('X PROG', this)">
                     Por Programar <span class="kg-badge" id="transfer-pds-xprog">[-]</span>
@@ -1219,7 +1296,7 @@
                     <thead>
                         <tr>
                             <th id="th-transfer-p" style="width: 30px; display:none;">P</th>
-                            <th style="width: 65px;">HOD</th>
+                            <th style="width: 65px; text-align: center;">HOD</th>
                             <th style="width: 75px; text-align: center;">F.ING.COST</th>
                             <th style="width: 40px;">CLIENTE</th>
                             <th style="width: 50px;">RUTA</th>
@@ -1255,7 +1332,7 @@
         </section>
         
         <!-- VISTA ARTES (Pza) -->
-        <section id="view-artes" class="view-section" style="display:none;">
+        <section id="view-artes" class="view-section">
             <div class="sub-nav">
                 <button id="btn-artes-bordado" class="sub-tab active" onclick="filterArtes('BORDADO', this)">
                     Bordado <span class="kg-badge" id="artes-pds-bordado">[-]</span>
@@ -1305,7 +1382,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th style="width: 65px;">HOD</th>
+                            <th style="width: 65px; text-align: center;">HOD</th>
                             <th style="width: 75px; text-align: center;">F.ING.COST</th>
                             <th style="width: 40px;">CLIENTE</th>
                             <th style="width: 45px;">OC</th>
@@ -1326,7 +1403,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th style="width: 65px;">HOD</th>
+                            <th style="width: 65px; text-align: center;">HOD</th>
                             <th style="width: 75px; text-align: center;">F.ING.COST</th>
                             <th style="width: 40px;">CLIENTE</th>
                             <th style="width: 45px;">OC</th>
@@ -1360,7 +1437,7 @@
         </section>
 
                 <!-- VISTA HABILITADO (Filtrado de Enumerado con estado_enumerado = OK ENM / OK S/ENM) -->
-                <section id="view-habilitado" class="view-section" style="display:none;">
+                <section id="view-habilitado" class="view-section">
                     <div class="sub-nav" style="margin-bottom:10px;">
                         <button id="habilitado-btn-xprog" class="sub-tab active" onclick="filterHabilitado('X PROG', this)">
                             Por Programar <span class="kg-badge" id="habilitado-pds-xprog">[-]</span>
@@ -1380,7 +1457,7 @@
                             <thead>
                                 <tr>
                                     <th id="th-habilitado-p" style="width: 30px;">P</th>
-                                    <th style="width: 65px;">HOD</th>
+                                    <th style="width: 65px; text-align: center;">HOD</th>
                                     <th style="width: 80px; text-align: center;">F.ING.COST</th>
                                     <th style="width: 80px; text-align:center;">STATUS</th>
                                     <th style="width: 55px; text-align:center;">CLIENTE</th>
@@ -1395,7 +1472,7 @@
                                     <th style="width: 85px; white-space:nowrap; text-align:center;">TRSF</th>
                                     <th style="width: 60px; white-space:nowrap; text-align:center;">BORD</th>
                                     <th style="width: 60px; text-align:center;">ESTMP</th>
-                                    <th style="width: 120px;">estado_habilitado</th>
+                                    <th style="width: auto; white-space: nowrap;">HABILITADO</th>
                                 </tr>
                             </thead>
                             <tbody id="tbody-habilitado"></tbody>
@@ -1417,7 +1494,7 @@
                     <thead>
                         <tr>
                             <th id="th-lavado-p" style="width: 30px;">P</th>
-                            <th style="width: 65px;">HOD</th>
+                            <th style="width: 65px; text-align: center;">HOD</th>
                             <th style="width: 65px; text-align: center;">F.ING.COST</th>
                             <th style="width: 30px;">CLIENTE</th>
                             
@@ -1471,7 +1548,7 @@
                         <tr>
                             <th id="th-corte-p" style="width: 30px; display:none;">P</th>
                             <th style="width: 70px;">F. GIRADO</th>
-                            <th style="width: 65px;">HOD</th>
+                            <th style="width: 65px; text-align: center;">HOD</th>
                             <th style="width: 75px; text-align: center;">F.ING.COST</th>
                             <th style="width: 40px;">CLIENTE</th>
                             <th style="width: 50px;">RUTA</th>
@@ -1494,7 +1571,7 @@
         </section>
 
         <!-- VISTA CORTE BLOQUES -->
-        <section id="view-corte-bloques" class="view-section" style="display:none;">
+        <section id="view-corte-bloques" class="view-section">
             <div class="sub-nav" style="margin-bottom:10px;">
                 <button id="corte-bloques-btn-xprog" class="sub-tab active" onclick="filterCorteBloques('X PROG', this)">
                     Por Programar <span class="kg-badge" id="corte-bloques-pds-xprog">[-]</span>
@@ -1508,7 +1585,7 @@
                     <thead>
                         <tr>
                             <th id="th-corte-bloques-p" style="width: 30px; display:none;">P</th>
-                            <th style="width: 65px;">HOD</th>
+                            <th style="width: 65px; text-align: center;">HOD</th>
                             <th style="width: 75px; text-align: center;">F.ING.COST</th>
                             <th style="width: 40px;">CLIENTE</th>
                             <th style="width: 50px;">RUTA</th>
@@ -2033,6 +2110,36 @@
             try { setupBloqueoHeaderFilterMenu(); } catch(e) { console.error('setupBloqueoHeaderFilterMenu error', e); }
             try { setupCorteHeaderFilterMenu(); } catch(e) { console.error('setupCorteHeaderFilterMenu error', e); }
             try { setupEnumeradoHeaderFilterMenu(); } catch(e) { console.error('setupEnumeradoHeaderFilterMenu error', e); }
+            
+            // Inicializar menú flotante desplegable
+            initFloatingMenu();
+        }
+
+        function initFloatingMenu() {
+            const toggleBtn = document.getElementById('floating-menu-toggle');
+            const menuItems = document.getElementById('floating-menu-items');
+            
+            if (!toggleBtn || !menuItems) return;
+            
+            // Toggle del menú al hacer click en el botón
+            toggleBtn.addEventListener('click', function() {
+                menuItems.classList.toggle('active');
+            });
+            
+            // Cerrar menú al hacer click fuera
+            document.addEventListener('click', function(e) {
+                if (!toggleBtn.contains(e.target) && !menuItems.contains(e.target)) {
+                    menuItems.classList.remove('active');
+                }
+            });
+            
+            // Cerrar menú cuando se hace click en un item (después de navegar)
+            const menuButtons = menuItems.querySelectorAll('.floating-menu-item');
+            menuButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    menuItems.classList.remove('active');
+                });
+            });
         }
 
         window.loadDataCallback = function(jsonResponse) {
@@ -2807,20 +2914,7 @@
                 // Si estamos en sub-tab PROG, agregar celda P al inicio
                 if (showPColumn) {
                     const pCell = document.createElement('td');
-                    // Mostrar como texto cuando estamos en 'PROG' (no editable)
-                    try {
-                        const idxP = findHeaderIndexCaseInsensitive('P');
-                        const pValue = (idxP !== -1) ? String(row[idxP] || '').trim() : '';
-                        if (currentBloqueoFilter === 'PROG') {
-                            pCell.className = 'p-cell';
-                            pCell.style.textAlign = 'center';
-                            pCell.textContent = pValue;
-                        } else {
-                            pCell.innerHTML = createPrioridadCell(i, row).replace(/<td.*?>|<\/td>/g, '');
-                        }
-                    } catch(e) {
-                        pCell.innerHTML = createPrioridadCell(i, row).replace(/<td.*?>|<\/td>/g, '');
-                    }
+                    pCell.innerHTML = createPrioridadCell(i, row).replace(/<td.*?>|<\/td>/g, '');
                     tr.insertBefore(pCell, tr.firstChild);
                 }
                 
@@ -3385,16 +3479,22 @@
 
                 const tr = createRow(row, i, "lavado", currentGroup);
                 
-                // Agregar celda P al inicio
+                // Agregar celda P al inicio (Lavanderia siempre muestra P en "Por Lavar")
                 const pCell = document.createElement('td');
+                pCell.className = 'p-cell';
                 try {
                     const idxP = findHeaderIndexCaseInsensitive('P');
-                    const pValue = (idxP !== -1) ? String(row[idxP] || '').trim() : '';
-                    // En Lavanderia -> "Por Lavar" (filter 'EN LAV') mostrar P como dato no editable y centrado
-                    if (String(currentLavadoFilter).toUpperCase() === 'EN LAV') {
-                        pCell.className = 'p-cell';
-                        pCell.style.textAlign = 'center';
-                        pCell.textContent = pValue;
+                    const onLavView = document.getElementById('view-lavado') && document.getElementById('view-lavado').classList.contains('active');
+                    const isPorLavar = onLavView && String(currentLavadoFilter).toUpperCase() === 'EN LAV';
+                    if (idxP !== -1) {
+                        const pVal = String(row[idxP] || '').trim();
+                        if (isPorLavar) {
+                            // Mostrar como texto no editable
+                            pCell.textContent = pVal;
+                        } else {
+                            // Mantener input en otros casos
+                            pCell.innerHTML = createPrioridadCell(i, row).replace(/<td.*?>|<\/td>/g, '');
+                        }
                     } else {
                         pCell.innerHTML = createPrioridadCell(i, row).replace(/<td.*?>|<\/td>/g, '');
                     }
@@ -3742,16 +3842,7 @@
                     // Agregar celda P al inicio en sub-tabs PROG
                     if (showPColumn) {
                         const pCell = document.createElement('td');
-                        try {
-                            // En los sub-taps PROG (PROG 1T/2T/3T) la columna P debe ser dato no editable y centrado
-                            const idxP_local = findHeaderIndexCaseInsensitive('P');
-                            const pValue_local = (idxP_local !== -1) ? String(row[idxP_local] || '').trim() : '';
-                            pCell.className = 'p-cell';
-                            pCell.style.textAlign = 'center';
-                            pCell.textContent = pValue_local;
-                        } catch (e) {
-                            pCell.innerHTML = createPrioridadCell(i, row).replace(/<td.*?>|<\/td>/g, '');
-                        }
+                        pCell.innerHTML = createPrioridadCell(i, row).replace(/<td.*?>|<\/td>/g, '');
                         tr.insertBefore(pCell, tr.firstChild);
                     }
                     
@@ -3938,7 +4029,20 @@
 
                 // Agregar celda P al inicio en Enumerado
                 const pCell = document.createElement('td');
-                pCell.innerHTML = createPrioridadCell(item.i, item.row).replace(/<td.*?>|<\/td>/g, '');
+                try {
+                    const btnPor = document.getElementById('enumerado-btn-por');
+                    const isPorActive = btnPor && btnPor.classList.contains('active');
+                    const idxP = findHeaderIndexCaseInsensitive('P');
+                    const pVal = (idxP !== -1 && item.row && item.row[idxP] !== undefined) ? String(item.row[idxP]).trim() : '';
+                    if (isPorActive) {
+                        // Mostrar como texto no editable
+                        pCell.textContent = pVal;
+                    } else {
+                        pCell.innerHTML = createPrioridadCell(item.i, item.row).replace(/<td.*?>|<\/td>/g, '');
+                    }
+                } catch (e) {
+                    pCell.innerHTML = createPrioridadCell(item.i, item.row).replace(/<td.*?>|<\/td>/g, '');
+                }
                 tr.insertBefore(pCell, tr.firstChild);
 
                 const ocNow = (item.oc || '').toString();
@@ -4033,10 +4137,14 @@
                         tdFDesp.innerText = formatValue(getVal(row, 'HOD') || getVal(row, 'F DESPACHO') || '', 'date');
                         tr.appendChild(tdFDesp);
                         
-                        // F.ING.COST - usar date picker si estamos en X PROG
+                        // F.ING.COST - mostrar como texto en X PROG (no editable)
                         const tdFCost = document.createElement('td');
                         tdFCost.className = 'date-cell';
                         if (currentTransferFilter === 'X PROG') {
+                            // En 'Por Programar' mostramos la fecha como texto (no editable)
+                            tdFCost.innerText = formatValue(getVal(row, 'F. ING COST') || getVal(row, 'F ING COST') || getVal(row, 'F.ING.COST') || '', 'date');
+                        } else {
+                            // En otras vistas mantenemos el date-picker para edición
                             const rawFIngCost = getVal(row, 'F.ING.COST') || getVal(row, 'F. ING COST') || getVal(row, 'F ING COST') || '';
                             const dateValue = convertToDateInputFormat(rawFIngCost);
                             tdFCost.innerHTML = `<input type="date" class="short-year" value="${dateValue}" onchange="handleDateChange(this, ${i}, 'F.ING.COST')"><span class="date-yy">${formatDateShortFromInput(dateValue) || 'mm/dd/aaaa'}</span>`;
@@ -4051,8 +4159,6 @@
                                     };
                                 }
                             }, 0);
-                        } else {
-                            tdFCost.innerText = formatValue(getVal(row, 'F. ING COST') || getVal(row, 'F ING COST') || '', 'date');
                         }
                         tr.appendChild(tdFCost);
                         
@@ -4154,41 +4260,45 @@
                         tdTipoTransfer.innerText = getVal(row, 'tipo-transfer') || getVal(row, 'tipo_transfer') || '';
                         tr.appendChild(tdTipoTransfer);
                         
-                        // estado_transfer (select con valores X PROG, PROG y opcionalmente OK)
+                        // estado_transfer: en 'Por Programar' mostrar como texto (no editable)
                         const tdEstadoTransfer = document.createElement('td');
-                        const selEstado = document.createElement('select');
-                        selEstado.className = 'table-select';
-                        selEstado.setAttribute('data-row-index', i);
-                        // Mostrar la opción OK sólo en el sub-tab 'PROG' o si el valor actual es 'OK'
-                        const showOkOption = (currentTransferFilter === 'PROG') || (estadoTransfer === 'OK');
-                        selEstado.innerHTML = `
-                            <option value="X PROG" ${estadoTransfer === 'X PROG' ? 'selected' : ''}>X PROG</option>
-                            <option value="PROG" ${estadoTransfer === 'PROG' ? 'selected' : ''}>PROG</option>
-                            ${showOkOption ? `<option value="OK" ${estadoTransfer === 'OK' ? 'selected' : ''}>OK</option>` : ''}
-                        `;
-                        // Aplicar clases visuales según el valor actual
-                        if (estadoTransfer === 'PROG') { selEstado.classList.add('sel-PROG'); selEstado.classList.remove('sel-OK'); }
-                        else if (estadoTransfer === 'OK') { selEstado.classList.add('sel-OK'); selEstado.classList.remove('sel-PROG'); }
-                        else { selEstado.classList.remove('sel-PROG'); selEstado.classList.remove('sel-OK'); }
-                        selEstado.onchange = function() {
-                            // Validar que n.transfxpda no esté vacío o "LLEVA?" antes de cambiar a PROG
-                            if (this.value === 'PROG') {
-                                const rawNTransChk = getVal(row, 'n.transfxpda');
-                                const nTransfValChk = ((rawNTransChk !== undefined && rawNTransChk !== null && rawNTransChk.toString().trim() !== '') ? rawNTransChk.toString().trim() : 'LLEVA?');
-                                if (nTransfValChk === '' || nTransfValChk === 'LLEVA?') {
-                                    alert('Debe especificar el número de transfer por prenda antes de cambiar a PROG');
-                                    this.value = estadoTransfer; // revertir al valor anterior
-                                    return;
+                        if (currentTransferFilter === 'X PROG') {
+                            tdEstadoTransfer.innerText = estadoTransfer;
+                        } else {
+                            const selEstado = document.createElement('select');
+                            selEstado.className = 'table-select';
+                            selEstado.setAttribute('data-row-index', i);
+                            // Mostrar la opción OK sólo en el sub-tab 'PROG' o si el valor actual es 'OK'
+                            const showOkOption = (currentTransferFilter === 'PROG') || (estadoTransfer === 'OK');
+                            selEstado.innerHTML = `
+                                <option value="X PROG" ${estadoTransfer === 'X PROG' ? 'selected' : ''}>X PROG</option>
+                                <option value="PROG" ${estadoTransfer === 'PROG' ? 'selected' : ''}>PROG</option>
+                                ${showOkOption ? `<option value="OK" ${estadoTransfer === 'OK' ? 'selected' : ''}>OK</option>` : ''}
+                            `;
+                            // Aplicar clases visuales según el valor actual
+                            if (estadoTransfer === 'PROG') { selEstado.classList.add('sel-PROG'); selEstado.classList.remove('sel-OK'); }
+                            else if (estadoTransfer === 'OK') { selEstado.classList.add('sel-OK'); selEstado.classList.remove('sel-PROG'); }
+                            else { selEstado.classList.remove('sel-PROG'); selEstado.classList.remove('sel-OK'); }
+                            selEstado.onchange = function() {
+                                // Validar que n.transfxpda no esté vacío o "LLEVA?" antes de cambiar a PROG
+                                if (this.value === 'PROG') {
+                                    const rawNTransChk = getVal(row, 'n.transfxpda');
+                                    const nTransfValChk = ((rawNTransChk !== undefined && rawNTransChk !== null && rawNTransChk.toString().trim() !== '') ? rawNTransChk.toString().trim() : 'LLEVA?');
+                                    if (nTransfValChk === '' || nTransfValChk === 'LLEVA?') {
+                                        alert('Debe especificar el número de transfer por prenda antes de cambiar a PROG');
+                                        this.value = estadoTransfer; // revertir al valor anterior
+                                        return;
+                                    }
                                 }
-                            }
-                            updateRow(i, 'estado_transfer', this.value, this);
-                            // Ajustar clases visuales
-                            this.classList.remove('sel-PROG');
-                            this.classList.remove('sel-OK');
-                            if (this.value === 'PROG') this.classList.add('sel-PROG');
-                            if (this.value === 'OK') this.classList.add('sel-OK');
-                        };
-                        tdEstadoTransfer.appendChild(selEstado);
+                                updateRow(i, 'estado_transfer', this.value, this);
+                                // Ajustar clases visuales
+                                this.classList.remove('sel-PROG');
+                                this.classList.remove('sel-OK');
+                                if (this.value === 'PROG') this.classList.add('sel-PROG');
+                                if (this.value === 'OK') this.classList.add('sel-OK');
+                            };
+                            tdEstadoTransfer.appendChild(selEstado);
+                        }
                         tr.appendChild(tdEstadoTransfer);
                         
                         // Agregar celda P al inicio si estamos en sub-tab PROG
@@ -4567,17 +4677,27 @@
                     count++;
                     const tr = document.createElement('tr');
 
-                    // COLUMNA P - Prioridad
+                    // COLUMNA P - Prioridad (mostrar como texto en X PROG)
                     const pCell = document.createElement('td');
-                    pCell.innerHTML = createPrioridadCell(i, row).replace(/<td.*?>|<\/td>/g, '');
+                    if (currentHabilitadoFilter === 'X PROG') {
+                        const pVal = (getVal(row, 'P') || '').toString().trim();
+                        pCell.innerHTML = pVal;
+                    } else {
+                        pCell.innerHTML = createPrioridadCell(i, row).replace(/<td.*?>|<\/td>/g, '');
+                    }
 
                     // HOD
                     const fDesp = formatValue(getVal(row, 'HOD'), 'date') || '';
 
-                    // F.ING.COST -> mantener lógica de date picker (usamos formato de input si es posible)
+                    // F.ING.COST -> mostrar como texto en X PROG (no editable), sino date-picker
                     const rawFIng = getVal(row, 'F.ING.COST');
                     const dateValue = convertToDateInputFormat(rawFIng);
-                    const fIngHtml = `<td class="date-cell"><input type="date" class="short-year" value="${dateValue}" onchange="handleDateChange(this, ${i}, 'F.ING.COST')"><span class="date-yy">${formatDateShortFromInput(dateValue) || 'mm/dd/aaaa'}</span></td>`;
+                    let fIngHtml = '';
+                    if (currentHabilitadoFilter === 'X PROG') {
+                        fIngHtml = `<td class="date-cell">${formatValue(getVal(row, 'F.ING.COST') || getVal(row, 'F ING COST') || '', 'date')}</td>`;
+                    } else {
+                        fIngHtml = `<td class="date-cell"><input type="date" class="short-year" value="${dateValue}" onchange="handleDateChange(this, ${i}, 'F.ING.COST')"><span class="date-yy">${formatDateShortFromInput(dateValue) || 'mm/dd/aaaa'}</span></td>`;
+                    }
 
                     // CLIENTE
                     const cliente = normalizeClientName(getVal(row, 'CLIENTE')) || '';
@@ -4768,15 +4888,20 @@
                     // Mostrar opción OK solo en sub-tabs PROG 1T, PROG 2T, PROG 3T
                     const showOkOption = (currentHabilitadoFilter === 'PROG 1T' || currentHabilitadoFilter === 'PROG 2T' || currentHabilitadoFilter === 'PROG 3T');
                     
-                    const habilHtml = `<td>
-                        <select class="table-select ${habilClass}" onchange="if(this.value === 'OK') { abrirModalIngresoCostura(${i}); this.value = '${habilValNorm}'; } else { updateRow(${i}, 'estado_habilitado', this.value, this); setTimeout(renderHabilitado, 300); }">
-                            <option value="X PROG" ${habilValNorm === 'X PROG' || habilValNorm === '' ? 'selected' : ''}>X PROG</option>
-                            <option value="PROG 1T" ${habilValNorm === 'PROG 1T' ? 'selected' : ''}>PROG 1T</option>
-                            <option value="PROG 2T" ${habilValNorm === 'PROG 2T' ? 'selected' : ''}>PROG 2T</option>
-                            <option value="PROG 3T" ${habilValNorm === 'PROG 3T' ? 'selected' : ''}>PROG 3T</option>
-                            ${showOkOption ? `<option value="OK" ${habilValNorm === 'OK' ? 'selected' : ''}>OK</option>` : ''}
-                        </select>
-                    </td>`;
+                    let habilHtml = '';
+                    if (currentHabilitadoFilter === 'X PROG') {
+                        habilHtml = `<td style="text-align:center;">${habilValNorm}</td>`;
+                    } else {
+                        habilHtml = `<td>
+                            <select class="table-select ${habilClass}" onchange="if(this.value === 'OK') { abrirModalIngresoCostura(${i}); this.value = '${habilValNorm}'; } else { updateRow(${i}, 'estado_habilitado', this.value, this); setTimeout(renderHabilitado, 300); }">
+                                <option value="X PROG" ${habilValNorm === 'X PROG' || habilValNorm === '' ? 'selected' : ''}>X PROG</option>
+                                <option value="PROG 1T" ${habilValNorm === 'PROG 1T' ? 'selected' : ''}>PROG 1T</option>
+                                <option value="PROG 2T" ${habilValNorm === 'PROG 2T' ? 'selected' : ''}>PROG 2T</option>
+                                <option value="PROG 3T" ${habilValNorm === 'PROG 3T' ? 'selected' : ''}>PROG 3T</option>
+                                ${showOkOption ? `<option value="OK" ${habilValNorm === 'OK' ? 'selected' : ''}>OK</option>` : ''}
+                            </select>
+                        </td>`;
+                    }
 
                     // STATUS - Columna calculada según RUTA TELA y estados
                     const rutaTela = (getVal(row, 'RUTA TELA') || getVal(row, 'RUTA_TELA') || getVal(row, 'RUTA') || '').toString().toUpperCase().trim();
@@ -5187,15 +5312,18 @@
                 const fDespacho = formatValue(getVal(row, "HOD"), 'date');
                 
                 // Determinar si F.ING.COST debe ser date picker
-                // Requerimiento: en 'Por Programar' mostrar F.ING.COST como dato visible (no date-picker)
                 let fIngCostHtml = '';
                 let useDatePicker = false;
                 try {
-                    // Mantener date-picker solo en vistas que lo requieran explícitamente (no Bloqueo X PROG)
+                    const isBloqueoView = document.getElementById('view-bloqueo') && document.getElementById('view-bloqueo').classList.contains('active');
                     const isLavadoView = document.getElementById('view-lavado') && document.getElementById('view-lavado').classList.contains('active');
-                    if (isLavadoView) useDatePicker = false; // lavado usa su propio select logic; mantener false por defecto
+                    
+                    // Bloqueo → usar date picker en sub-tabs distintos de 'Por Programar' (X PROG)
+                    // En 'Por Programar' queremos mostrar el dato como texto (no editable)
+                    if (isBloqueoView && currentBloqueoFilter !== 'X PROG') useDatePicker = true;
+                    // Lavado siempre tiene sub-tab activo, no aplica date picker aquí
                 } catch (e) {}
-
+                
                 if (useDatePicker) {
                     const rawFIngCost = getVal(row, "F.ING.COST");
                     const dateValue = convertToDateInputFormat(rawFIngCost);
@@ -5247,8 +5375,7 @@
                     let ribHtml = '';
                     try {
                         const onBloqView = document.getElementById('view-bloqueo') && document.getElementById('view-bloqueo').classList.contains('active');
-                        // Requerimiento: en sub-tab PROG mostrar RIB como dato visible (no editable).
-                        if (onBloqView && (currentBloqueoFilter === 'X PROG' || currentBloqueoFilter === 'PROG')) {
+                        if (onBloqView && currentBloqueoFilter === 'X PROG') {
                             const spanClass = (ribValue === 'SI LLEVA') ? 'rib-si-lleva' : 'rib-text';
                             ribHtml = `<td title="${ribValue}"><span class="${spanClass}">${ribValue}</span></td>`;
                         } else {
@@ -5324,18 +5451,16 @@
                             ${okOptionHtml}
                         </select>`;
 
-                    // Mostrar Bloqueo como dato (no desplegable) en los sub-tabs X PROG y PROG según requerimiento
+                    // Si estamos en la vista Bloqueo->Por Programar (X PROG), mostrar solo texto
                     let bloqHtml = '';
                     try {
                         const onBloqView = document.getElementById('view-bloqueo') && document.getElementById('view-bloqueo').classList.contains('active');
-                        if (onBloqView && (currentBloqueoFilter === 'X PROG' || currentBloqueoFilter === 'PROG')) {
-                            bloqHtml = `<td title="${effectiveValue}"><span class="status-tag">${effectiveValue}</span></td>`;
+                        if (onBloqView && currentBloqueoFilter === 'X PROG') {
+                            bloqHtml = `<td title="${effectiveValue}"><span class="${bloqClass}">${effectiveValue}</span></td>`;
                         } else {
                             bloqHtml = `<td>${bloqSelect}</td>`;
                         }
-                    } catch(e) {
-                        bloqHtml = `<td>${bloqSelect}</td>`;
-                    }
+                    } catch(e) { bloqHtml = `<td>${bloqSelect}</td>`; }
 
                     controlHtml = `<td title="${nroMolde}">${nroMolde}</td><td title="${tipoCert}">${tipoCert}</td>${bloqHtml}${ribHtml}`;
 
@@ -5363,6 +5488,18 @@
                                 </select>
                                 ${isDevol ? '<span class="lav-badge" title="EN LAV (devolucion)">DEVOL.</span>' : ''}
                             </div>`;
+
+                        // En Lavado -> Por Lavar (EN LAV) mostrar solo el dato (sin select)
+                        let lavHtml = '';
+                        try {
+                            const onLavView = document.getElementById('view-lavado') && document.getElementById('view-lavado').classList.contains('active');
+                            if (onLavView && String(currentLavadoFilter).toUpperCase() === 'EN LAV') {
+                                const spanClass = (lavValue === 'OK') ? 'sel-OK' : 'sel-ENLAV';
+                                lavHtml = `<td><div class="lav-wrap"><span class="${spanClass}">${lavValue}</span>${isDevol ? '<span class="lav-badge" title="EN LAV (devolucion)">DEVOL.</span>' : ''}</div></td>`;
+                            } else {
+                                lavHtml = `<td>${lavSelect}</td>`;
+                            }
+                        } catch(e) { lavHtml = `<td>${lavSelect}</td>`; }
                     
                     const ribOriginal = rib || "NO LLEVA";
                     const ribGuardado = getVal(row, "estado_rib");
@@ -5396,7 +5533,7 @@
                                     </select>`;
                     }
 
-                    controlHtml = `<td title="${tipoCert}">${tipoCert}</td><td>${lavSelect}</td><td>${ribSelect}</td>`;
+                    controlHtml = `<td title="${tipoCert}">${tipoCert}</td>${lavHtml}<td>${ribSelect}</td>`;
                 }
 
                 // Usamos title para mostrar el dato completo en hover por si acaso
@@ -5446,13 +5583,13 @@
                     const isArtesView = document.getElementById('view-artes') && document.getElementById('view-artes').classList.contains('active');
                     const isHabilitadoView = document.getElementById('view-habilitado') && document.getElementById('view-habilitado').classList.contains('active');
                     const isCorteBloques = document.getElementById('view-corte-bloques') && document.getElementById('view-corte-bloques').classList.contains('active');
-                    // Forzar modo lectura en toda la vista Corte: todas las columnas se presentan como datos no editables
-                    const forceReadOnlyCorte = !!isCorteView;
                     
-                    // Corte Pzas: no usar date-picker — todas las columnas deben mostrarse como datos (no editables)
-                    if (forceReadOnlyCorte) useDatePicker = false;
-                    // Corte Bloques → Por Programar (X PROG)
-                    if (isCorteBloques && currentCorteBloquesFilter === 'X PROG') useDatePicker = true;
+                    // Corte Pzas → usar date picker en sub-tabs distintos de 'Por Programar' (X PROG)
+                    // En 'Por Programar' (X PROG) queremos mostrar F.ING.COST como texto (no editable)
+                    if (isCorteView && currentCorteFilter !== 'X PROG') useDatePicker = true;
+                    // Corte Bloques → usar date picker en sub-tabs distintos de 'Por Programar' (X PROG)
+                    // En 'Por Programar' (X PROG) queremos mostrar F.ING.COST como texto (no editable)
+                    if (isCorteBloques && currentCorteBloquesFilter !== 'X PROG') useDatePicker = true;
                     // Enumerado → Por enumerar (sub-tab activo)
                     if (isEnumeradoView) useDatePicker = true;
                     // Transfer → Por Programar (X PROG)
@@ -5523,21 +5660,11 @@
                 const estadoBloques = getVal(row, "ESTADO BLOQUES") || getVal(row, "ESTADO_BLOQUES") || getVal(row, "estado_bloques") || "";
                 const estadoCollTap = getVal(row, "ESTADO COLL TAP") || getVal(row, "ESTADO_COLL_TAP") || getVal(row, "estado_coll_tap") || "";
 
-                // Determinar si mostrar el botón de tendido (originalmente en sub-tabs PROG 1T/2T/3T)
+                // Determinar si mostrar el botón de tendido (solo en sub-tabs PROG 1T/2T/3T)
                 const showTendidoBtn = (currentCorteFilter === 'PROG 1T' || currentCorteFilter === 'PROG 2T' || currentCorteFilter === 'PROG 3T') && !isHabilitadoView();
-                // Requisito: eliminar el botón '+' en los sub-taps PROG 1T/2T/3T => forzamos vacío cuando estamos en Corte PROG
-                let tendidoBtnHtml = '';
-                try {
-                    const onCorteViewLocal = document.getElementById('view-corte') && document.getElementById('view-corte').classList.contains('active');
-                    if (onCorteViewLocal && showTendidoBtn) {
-                        // No mostrar el botón en PROG subtabs: dejar tendidoBtnHtml como ''
-                        tendidoBtnHtml = '';
-                    } else if (showTendidoBtn) {
-                        tendidoBtnHtml = `<button class="btn-tendido" onclick="abrirModalTendido(${rowIndex}, '${op}', '${corte}', '${String(color).replace(/'/g, "\\'")}', ${pdsRaw})" title="Dividir en tendidos">+</button>`;
-                    }
-                } catch(e) {
-                    tendidoBtnHtml = '';
-                }
+                const tendidoBtnHtml = showTendidoBtn 
+                    ? `<button class="btn-tendido" onclick="abrirModalTendido(${rowIndex}, '${op}', '${corte}', '${String(color).replace(/'/g, "\\'")}', ${pdsRaw})" title="Dividir en tendidos">+</button>` 
+                    : '';
 
                 // Usar la función helper para renderizar el badge de RUTA
                 const rutaDisplay = renderRutaBadge(rutaVal, row, rowIndex);
@@ -5545,13 +5672,7 @@
                 // Determinar si OP-PTDA debe ser clickeable (solo en Corte PROG 1T/2T/3T y cuando RUTA != "AC")
                 const isCorteProgView = (currentCorteFilter === 'PROG 1T' || currentCorteFilter === 'PROG 2T' || currentCorteFilter === 'PROG 3T');
                 const rutaKey = String(rutaVal || "").toUpperCase().trim();
-                let makeOpPtdaClickable = isCorteProgView && rutaKey !== 'ACABADA' && !isHabilitadoView();
-                // Requisito: en sub-taps PROG 1T/2T/3T quitar la lógica de hipervínculo para OP-PTDA
-                try {
-                    if (isCorteView && currentCorteFilter && currentCorteFilter.toString().toUpperCase().startsWith('PROG ')) {
-                        makeOpPtdaClickable = false;
-                    }
-                } catch(e) {}
+                const makeOpPtdaClickable = isCorteProgView && rutaKey !== 'ACABADA' && !isHabilitadoView();
                 const opPtdaHtml = makeOpPtdaClickable 
                     ? `<span class="oc-link" style="cursor:pointer;" onclick="abrirModalLavadoFromCorte(${rowIndex})" title="Cambiar estado lavada">${opPtda}</span>`
                     : opPtda;
@@ -5578,8 +5699,7 @@
                             const ribClass = (ribValue === "OK") ? "sel-OK" : "";
                             try {
                                 const onCorteView = document.getElementById('view-corte') && document.getElementById('view-corte').classList.contains('active');
-                                // En la vista Corte Pzas todas las columnas son datos (no editables)
-                                if (onCorteView) {
+                                if (onCorteView && currentCorteFilter === 'X PROG') {
                                     const spanClass = (ribValue === 'SI LLEVA') ? 'rib-si-lleva' : 'rib-text';
                                     return `<span title="${ribValue}" class="${spanClass}">${ribValue}</span>`;
                                 }
@@ -5605,12 +5725,13 @@
                                     if (isEnumeradoView()) return equipoCorte || '';
                                 } catch (e) {}
 
-                                // En la vista Corte todas las columnas son no editables: mostrar sólo el texto
+                                // En la vista Enumerado o en Corte->Por Programar (X PROG) mostrar solo el dato (texto)
                                 try {
-                                    const onCorteViewLocal = document.getElementById('view-corte') && document.getElementById('view-corte').classList.contains('active');
-                                    if (onCorteViewLocal) return equipoCorte || '';
-                                } catch(e) {}
-                                // Si no estamos en Corte, mantener comportamiento previo
+                                    const onCorteView = document.getElementById('view-corte') && document.getElementById('view-corte').classList.contains('active');
+                                    if (isEnumeradoView() || (onCorteView && currentCorteFilter === 'X PROG')) return equipoCorte || '';
+                                } catch (e) {}
+
+                                // Para otros sub-tabs (p.ej. PROG 1T/2T/3T) mostrar select editable
                                 if (currentCorteFilter === 'X PROG') {
                                     const currentEquipo = equipoCorte || '';
                                     let optionsHtml = '<option value="">-- Seleccionar --</option>';
@@ -5649,11 +5770,15 @@
 
                                 const xProgOption = allowXProg ? `<option value="X PROG" ${(!effectiveEst || effectiveEst === '' || effectiveEst === 'X PROG') ? 'selected' : ''}>X PROG</option>` : '';
 
-                                // En la vista Corte todas las columnas deben ser no editables
                                 try {
-                                    const onCorteViewLocal = document.getElementById('view-corte') && document.getElementById('view-corte').classList.contains('active');
-                                    if (onCorteViewLocal) return `<span title="${estadoCorte}">${estadoCorte}</span>`;
+                                    const onCorte = document.getElementById('view-corte') && document.getElementById('view-corte').classList.contains('active');
+                                    if (onCorte && currentCorteFilter === 'X PROG') {
+                                        // Mostrar solo texto en Corte -> Por Programar
+                                        const displayEst = effectiveEst || '';
+                                        return `<span title="${displayEst}">${displayEst}</span>`;
+                                    }
                                 } catch(e) {}
+
                                 return `
                                     <select class="table-select ${estClass}" onchange="updateRow(${rowIndex}, '${updateColName}', this.value, this)">
                                         ${xProgOption}
@@ -5668,12 +5793,6 @@
                     ${(() => {
                         // Si estamos en sub-tab PROG (1T/2T/3T) dentro de la vista Corte,
                         // o si estamos en la vista Enumerado, mostramos selects con las opciones solicitadas.
-                        // Si estamos en la vista Corte, forzar celdas como texto (no editables)
-                        try {
-                            const onCorteViewLocal = document.getElementById('view-corte') && document.getElementById('view-corte').classList.contains('active');
-                            if (onCorteViewLocal) return `<td title="${estadoBloques}">${estadoBloques}</td>\n                    <td title="${estadoCollTap}">${estadoCollTap}</td>`;
-                        } catch(e) {}
-
                         if (isCorteProgSubtab() || isEnumeradoView() || isHabilitadoView()) {
                             const bloqVal = (estadoBloques || '').toString();
                             const collVal = (estadoCollTap || '').toString();
@@ -7182,6 +7301,13 @@
                     try {
                         const filtEl = document.getElementById('corte-route-filters');
                         if (filtEl) filtEl.style.display = (filterState === 'X PROG') ? 'flex' : 'none';
+                        // Ocultar el switch 'Normal' cuando estemos en Por Programar (X PROG)
+                        try {
+                            const normalInput = document.getElementById('flt-normal');
+                            if (normalInput && normalInput.parentElement) {
+                                normalInput.parentElement.style.display = (filterState === 'X PROG') ? 'none' : '';
+                            }
+                        } catch(e) {}
                     } catch (e) {}
                     // Mostrar/ocultar botón EQ_Corte solo cuando estemos en 'Por Programar' (X PROG)
                     try {
@@ -7687,9 +7813,11 @@
                 tdFDesp.innerText = formatValue(getVal(row, 'HOD') || getVal(row, 'F DESPACHO') || '', 'date');
                 tr.appendChild(tdFDesp);
 
-                // F.ING.COST - usar date picker si estamos en X PROG
+                // F.ING.COST - mostrar como texto en X PROG (no editable)
                 const tdFCost = document.createElement('td'); tdFCost.className = 'date-cell';
                 if (window.currentArtesBordadoFilter === 'X PROG') {
+                    tdFCost.innerText = formatValue(getVal(row, 'F.ING.COST') || getVal(row, 'F ING COST') || '', 'date');
+                } else {
                     const rawFIngCost = getVal(row, 'F.ING.COST') || getVal(row, 'F ING COST') || '';
                     const dateValue = convertToDateInputFormat(rawFIngCost);
                     tdFCost.innerHTML = `<input type="date" class="short-year" value="${dateValue}" onchange="handleDateChange(this, ${i}, 'F.ING.COST')"><span class="date-yy">${formatDateShortFromInput(dateValue) || 'mm/dd/aaaa'}</span>`;
@@ -7704,8 +7832,6 @@
                             };
                         }
                     }, 0);
-                } else {
-                    tdFCost.innerText = formatValue(getVal(row, 'F.ING.COST') || getVal(row, 'F ING COST') || '', 'date');
                 }
                 tr.appendChild(tdFCost);
 
@@ -7740,13 +7866,17 @@
                 tdNbd.innerText = valNbd;
                 tr.appendChild(tdNbd);
 
-                // estado_bordado -> select editable (X PROG / PROG)
+                // estado_bordado -> mostrar como texto en X PROG, sino select editable
                 const tdEst = document.createElement('td');
-                const selEst = document.createElement('select');
-                selEst.className = 'table-select';
-                selEst.innerHTML = `<option value="X PROG" ${estadoBNorm === 'X PROG' ? 'selected' : ''}>X PROG</option><option value="PROG" ${estadoBNorm.toUpperCase().indexOf('PROG')!==-1 && estadoBNorm.toUpperCase()!=='X PROG' ? 'selected' : ''}>PROG</option>`;
-                selEst.onchange = function(){ updateRow(i, 'estado_bordado', this.value, this); setTimeout(()=>{ renderArtesBordado(); updateCounters(); }, 300); };
-                tdEst.appendChild(selEst);
+                if (window.currentArtesBordadoFilter === 'X PROG') {
+                    tdEst.innerText = estadoBNorm;
+                } else {
+                    const selEst = document.createElement('select');
+                    selEst.className = 'table-select';
+                    selEst.innerHTML = `<option value="X PROG" ${estadoBNorm === 'X PROG' ? 'selected' : ''}>X PROG</option><option value="PROG" ${estadoBNorm.toUpperCase().indexOf('PROG')!==-1 && estadoBNorm.toUpperCase()!=='X PROG' ? 'selected' : ''}>PROG</option>`;
+                    selEst.onchange = function(){ updateRow(i, 'estado_bordado', this.value, this); setTimeout(()=>{ renderArtesBordado(); updateCounters(); }, 300); };
+                    tdEst.appendChild(selEst);
+                }
                 tr.appendChild(tdEst);
 
                 // Alternar sombreado por OP-PTDA
@@ -7833,9 +7963,11 @@
 
                 // HOD
                 const tdFDesp = document.createElement('td'); tdFDesp.className = 'date-cell'; tdFDesp.innerText = formatValue(getVal(row, 'HOD') || getVal(row, 'F DESPACHO') || '', 'date'); tr.appendChild(tdFDesp);
-                // F.ING.COST - usar date picker si estamos en X PROG
+                // F.ING.COST - mostrar como texto en X PROG (no editable)
                 const tdFCost = document.createElement('td'); tdFCost.className = 'date-cell';
                 if (window.currentArtesEstampadoFilter === 'X PROG') {
+                    tdFCost.innerText = formatValue(getVal(row, 'F.ING.COST') || getVal(row, 'F ING COST') || '', 'date');
+                } else {
                     const rawFIngCost = getVal(row, 'F.ING.COST') || getVal(row, 'F ING COST') || '';
                     const dateValue = convertToDateInputFormat(rawFIngCost);
                     tdFCost.innerHTML = `<input type="date" class="short-year" value="${dateValue}" onchange="handleDateChange(this, ${i}, 'F.ING.COST')"><span class="date-yy">${formatDateShortFromInput(dateValue) || 'mm/dd/aaaa'}</span>`;
@@ -7850,8 +7982,6 @@
                             };
                         }
                     }, 0);
-                } else {
-                    tdFCost.innerText = formatValue(getVal(row, 'F.ING.COST') || getVal(row, 'F ING COST') || '', 'date');
                 }
                 tr.appendChild(tdFCost);
                 // CLIENTE
@@ -7869,12 +7999,17 @@
                 // n.ESTAMPxpda
                 const tdNest = document.createElement('td'); const valNest = getVal(row, 'n.ESTAMPxpda') || getVal(row, 'N.ESTAMPXPDA') || getVal(row, 'n.ESTAMP xpda') || ''; tdNest.innerText = valNest; tr.appendChild(tdNest);
 
-                // estado_estampado -> select editable (X PROG / PROG)
+                // estado_estampado -> mostrar como texto en X PROG, sino select editable
                 const tdEst = document.createElement('td');
-                const selEst = document.createElement('select'); selEst.className = 'table-select';
-                selEst.innerHTML = `<option value="X PROG" ${estadoNorm === 'X PROG' ? 'selected' : ''}>X PROG</option><option value="PROG" ${estadoNorm.toUpperCase().indexOf('PROG')!==-1 && estadoNorm.toUpperCase()!=='X PROG' ? 'selected' : ''}>PROG</option>`;
-                selEst.onchange = function(){ updateRow(i, 'estado_estampado', this.value, this); setTimeout(()=>{ renderArtesEstampado(); updateCounters(); }, 300); };
-                tdEst.appendChild(selEst); tr.appendChild(tdEst);
+                if (window.currentArtesEstampadoFilter === 'X PROG') {
+                    tdEst.innerText = estadoNorm;
+                } else {
+                    const selEst = document.createElement('select'); selEst.className = 'table-select';
+                    selEst.innerHTML = `<option value="X PROG" ${estadoNorm === 'X PROG' ? 'selected' : ''}>X PROG</option><option value="PROG" ${estadoNorm.toUpperCase().indexOf('PROG')!==-1 && estadoNorm.toUpperCase()!=='X PROG' ? 'selected' : ''}>PROG</option>`;
+                    selEst.onchange = function(){ updateRow(i, 'estado_estampado', this.value, this); setTimeout(()=>{ renderArtesEstampado(); updateCounters(); }, 300); };
+                    tdEst.appendChild(selEst);
+                }
+                tr.appendChild(tdEst);
 
                 tbody.appendChild(tr);
             });
@@ -8323,15 +8458,31 @@
                     if (valNorm === 'OK') selectClass = 'sel-OK';
                     
                     const td = document.createElement('td');
-                    // Ocultar la opción OK cuando el sub-tab activo sea 'X PROG' (Por Programar)
-                    const showOkOption = (typeof currentCorteBloquesFilter === 'undefined') ? true : (currentCorteBloquesFilter !== 'X PROG');
-                    td.innerHTML = `
-                        <select class="table-select ${selectClass}" onchange="updateRow(${i}, 'estado_corte_bloques', this.value, this)">
-                            <option value="X PROG" ${valNorm === 'X PROG' ? 'selected' : ''}>X PROG</option>
-                            <option value="PROG" ${valNorm === 'PROG' ? 'selected' : ''}>PROG</option>
-                            ${showOkOption ? `<option value="OK" ${valNorm === 'OK' ? 'selected' : ''}>OK</option>` : ''}
-                        </select>
-                    `;
+                    // Si estamos en Corte Bloques -> Por Programar (X PROG), mostrar solo texto
+                    try {
+                        if (currentCorteBloquesFilter === 'X PROG') {
+                            td.title = valNorm;
+                            td.innerText = valNorm;
+                        } else {
+                            // Ocultar la opción OK cuando el sub-tab activo sea 'X PROG' (Por Programar)
+                            const showOkOption = (typeof currentCorteBloquesFilter === 'undefined') ? true : (currentCorteBloquesFilter !== 'X PROG');
+                            td.innerHTML = `
+                                <select class="table-select ${selectClass}" onchange="updateRow(${i}, 'estado_corte_bloques', this.value, this)">
+                                    <option value="X PROG" ${valNorm === 'X PROG' ? 'selected' : ''}>X PROG</option>
+                                    <option value="PROG" ${valNorm === 'PROG' ? 'selected' : ''}>PROG</option>
+                                    ${showOkOption ? `<option value="OK" ${valNorm === 'OK' ? 'selected' : ''}>OK</option>` : ''}
+                                </select>
+                            `;
+                        }
+                    } catch(e) {
+                        td.innerHTML = `
+                            <select class="table-select ${selectClass}" onchange="updateRow(${i}, 'estado_corte_bloques', this.value, this)">
+                                <option value="X PROG" ${valNorm === 'X PROG' ? 'selected' : ''}>X PROG</option>
+                                <option value="PROG" ${valNorm === 'PROG' ? 'selected' : ''}>PROG</option>
+                                <option value="OK" ${valNorm === 'OK' ? 'selected' : ''}>OK</option>
+                            </select>
+                        `;
+                    }
                     tr.appendChild(td);
                 } catch (e) {}
 
@@ -8611,10 +8762,25 @@
         // FUNCIONES DEL MODAL DE LAVADORA (desde Corte PROG)
         // ===============================
         
-        // Modal abrir desde Corte (usado anteriormente por OP-PTDA). Desactivado por petición: convertir en no-op.
         window.abrirModalLavadoFromCorte = function(rowIndex) {
-            console.warn('abrirModalLavadoFromCorte está deshabilitado en Corte PROG');
-            return; // noop
+            try {
+                const row = rawData[rowIndex] || [];
+                const estado = getVal(row, 'estado_lavada') || '';
+                const ruta = getVal(row, 'RUTA TELA') || getVal(row, 'RUTA') || '';
+                const opTela = String(getVal(row, 'OP TELA') || '').trim();
+                const partida = String(getVal(row, 'PARTIDA') || '').trim();
+                const opPtda = `${opTela}-${partida}`;
+
+                document.getElementById('modal-lavadora-title').innerText = `OP-PTDA: ${opPtda}`;
+                document.getElementById('modal-lavadora-sub').innerText = `Estado actual: ${estado || '(vacío)'}`;
+                document.getElementById('modal-lavadora-ruta').innerText = ruta || '-';
+                const sel = document.getElementById('modal-lavadora-select');
+                if (sel) sel.value = '';
+
+                window._pendingWasherUpdate = { rowIndex, prev: estado };
+                const m = document.getElementById('modal-lavadora');
+                if (m) m.classList.add('active');
+            } catch (e) { console.error('Error abriendo modal lavadora', e); }
         };
 
         function cerrarModalLavado() {
