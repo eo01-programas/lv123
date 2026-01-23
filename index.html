@@ -1118,6 +1118,7 @@
                 <table>
                     <thead>
                         <tr>
+                            <th style="width: 18px;">RSV</th>
                             <th id="th-bloqueo-p" style="width: 30px; display:none;">P</th>
                             <th style="width: 65px;">HOD</th>
                             <th style="width: 65px; text-align: center;">F.ING.COST</th>
@@ -1467,6 +1468,7 @@
                 <table>
                     <thead>
                         <tr>
+                            <th style="width: 18px;">RSV</th>
                             <th id="th-corte-p" style="width: 30px; display:none;">P</th>
                             <th style="width: 65px;">HOD</th>
                             <th style="width: 75px; text-align: center;">F.ING.COST</th>
@@ -2623,28 +2625,8 @@
             return indices.sort((a, b) => {
                 const rowA = rawData[a];
                 const rowB = rawData[b];
-                
-                // 1. Ordenar por columna P primero (valores numéricos primero, luego vacíos)
-                const idxP = findHeaderIndexCaseInsensitive('P');
-                let pA = '';
-                let pB = '';
-                if (idxP !== -1) {
-                    pA = String(rowA[idxP] || '').trim();
-                    pB = String(rowB[idxP] || '').trim();
-                }
-                
-                // Convertir a número para comparación (vacío = Infinity para que vaya al final)
-                const pNumA = pA === '' ? Infinity : parseInt(pA) || Infinity;
-                const pNumB = pB === '' ? Infinity : parseInt(pB) || Infinity;
-                
-                if (pNumA !== pNumB) return pNumA - pNumB;
-                
-                // 2. Luego ordenar por fecha de despacho (más reciente primero)
-                const dateA = rowA[colMap["HOD"]] || 0;
-                const dateB = rowB[colMap["HOD"]] || 0;
-                if (dateA !== dateB) return dateB - dateA;
-                
-                // 3. Finalmente por OP-PTDA para mantener agrupación
+
+                // Comparadores comunes
                 const opTelaA = String(rowA[colMap["OP TELA"]] || "").trim();
                 const partidaA = String(rowA[colMap["PARTIDA"]] || "").trim();
                 const opPtdaA = (opTelaA + "-" + partidaA).toLowerCase();
@@ -2652,8 +2634,41 @@
                 const opTelaB = String(rowB[colMap["OP TELA"]] || "").trim();
                 const partidaB = String(rowB[colMap["PARTIDA"]] || "").trim();
                 const opPtdaB = (opTelaB + "-" + partidaB).toLowerCase();
-                
-                return opPtdaA.localeCompare(opPtdaB, undefined, { numeric: true, sensitivity: 'base' });
+
+                const idxP = findHeaderIndexCaseInsensitive('P');
+                let pA = '';
+                let pB = '';
+                if (idxP !== -1) {
+                    pA = String(rowA[idxP] || '').trim();
+                    pB = String(rowB[idxP] || '').trim();
+                }
+                const pNumA = pA === '' ? Infinity : parseInt(pA) || Infinity;
+                const pNumB = pB === '' ? Infinity : parseInt(pB) || Infinity;
+
+                // Si estamos en sub-tab PROG, ordenar primero por P (prioridad)
+                try {
+                    if (typeof currentBloqueoFilter !== 'undefined' && currentBloqueoFilter === 'PROG') {
+                        if (pNumA !== pNumB) return pNumA - pNumB;
+                        const opPtdaCmp = opPtdaA.localeCompare(opPtdaB, undefined, { numeric: true, sensitivity: 'base' });
+                        if (opPtdaCmp !== 0) return opPtdaCmp;
+                    } else {
+                        // Orden por defecto: OP-PTDA primero
+                        const opPtdaCmp = opPtdaA.localeCompare(opPtdaB, undefined, { numeric: true, sensitivity: 'base' });
+                        if (opPtdaCmp !== 0) return opPtdaCmp;
+                        if (pNumA !== pNumB) return pNumA - pNumB;
+                    }
+                } catch (e) {
+                    const opPtdaCmp = opPtdaA.localeCompare(opPtdaB, undefined, { numeric: true, sensitivity: 'base' });
+                    if (opPtdaCmp !== 0) return opPtdaCmp;
+                    if (pNumA !== pNumB) return pNumA - pNumB;
+                }
+
+                // Finalmente ordenar por fecha de despacho dentro del mismo grupo (más reciente primero)
+                const dateA = rowA[colMap["HOD"]] || 0;
+                const dateB = rowB[colMap["HOD"]] || 0;
+                if (dateA !== dateB) return dateB - dateA;
+
+                return 0;
             });
         }
 
@@ -2795,7 +2810,13 @@
 
                 const tr = createRow(row, i, "bloqueo", currentGroup);
                 
-                // Si estamos en sub-tab PROG, agregar celda P al inicio
+                // Agregar celda RSV al inicio
+                const rsvCell = document.createElement('td');
+                const rsvValue = String(getVal(row, "RSV") || "").trim();
+                rsvCell.textContent = rsvValue;
+                tr.insertBefore(rsvCell, tr.firstChild);
+                
+                // Si estamos en sub-tab PROG, agregar celda P al inicio (después de RSV)
                 if (showPColumn) {
                     const pCell = document.createElement('td');
                     // Mostrar como texto cuando estamos en 'PROG' (no editable)
@@ -2812,7 +2833,7 @@
                     } catch(e) {
                         pCell.innerHTML = createPrioridadCell(i, row).replace(/<td.*?>|<\/td>/g, '');
                     }
-                    tr.insertBefore(pCell, tr.firstChild);
+                    tr.insertBefore(pCell, tr.firstChild.nextSibling);
                 }
                 
                 // Si P = 1, aplicar color rojo claro
@@ -5542,7 +5563,11 @@
                     ? `<span class="oc-link" style="cursor:pointer;" onclick="abrirModalLavadoFromCorte(${rowIndex})" title="Cambiar estado lavada">${opPtda}</span>`
                     : opPtda;
 
+                // Obtener valor RSV
+                const rsv = getVal(row, "RSV") || "";
+
                 let html = `
+                    <td title="${rsv}">${rsv}</td>
                     <td class="date-cell">${fDespacho}</td>
                     ${fIngCostHtml}
                     <td title="${cliente}">${cliente}</td>
