@@ -1093,10 +1093,10 @@
     <header>
         <div class="brand"><i class="ph ph-table" title="Cargar giros"></i> Prog Lavandería</div>
         <nav class="nav-tabs">
-            <button class="nav-tab active" onclick="switchView('bloqueo', this)">
+            <button class="nav-tab" onclick="switchView('bloqueo', this)">
                 <i class="ph ph-lock-key"></i> Bloqueo <span class="badge" id="count-bloqueo">0</span>
             </button>
-            <button class="nav-tab" onclick="switchView('lavado', this)">
+            <button class="nav-tab active" onclick="switchView('lavado', this)">
                 <i class="ph ph-drop"></i> Lavanderia <span class="badge" id="count-lavado">0</span>
             </button>
             <button class="nav-tab" onclick="switchView('corte', this)">
@@ -1124,7 +1124,7 @@
     <main>
         
         <!-- VISTA BLOQUEO (TABLA) -->
-        <section id="view-bloqueo" class="view-section active">
+        <section id="view-bloqueo" class="view-section">
             <div class="sub-nav">
                 <button id="btn-xprog" class="sub-tab active" onclick="filterBloqueo('X PROG', this)">
                     Por Programar <span class="kg-badge" id="kg-xprog">[-]</span>
@@ -1423,7 +1423,7 @@
                 </section>
 
         <!-- VISTA LAVADO (TABLA DETALLADA) -->
-        <section id="view-lavado" class="view-section">
+        <section id="view-lavado" class="view-section active">
             <div class="sub-nav">
                 <!-- Solo un botón "Por Lavar" -->
                 <button id="btn-enlav" class="sub-tab active" onclick="filterLavado('EN LAV', this)">
@@ -5486,8 +5486,10 @@
                 }
 
                 // Usamos title para mostrar el dato completo en hover por si acaso
+                // En vista "lavado" alinear HOD a la izquierda para coincidir con el encabezado
+                const hodStyle = (type === "lavado") ? 'style="text-align:left;"' : '';
                 let html = `
-                    <td class="date-cell">${fDespacho}</td>
+                    <td class="date-cell" ${hodStyle}>${fDespacho}</td>
                     ${fIngCostHtml}
                     <td>${cliente}</td>
                     <!-- TOOLTIP TITLE PARA VER TEXTO COMPLETO -->
@@ -9535,6 +9537,5 @@
 
     </body>
     </html>
-
 
 
